@@ -4,6 +4,7 @@ import datetime
 
 NOTES_FILE = "notes.json"
 
+
 def load_notes():
     if os.path.exists(NOTES_FILE):
         with open(NOTES_FILE, "r") as file:
@@ -12,9 +13,11 @@ def load_notes():
     else:
         return []
 
+
 def save_notes(notes):
     with open(NOTES_FILE, "w") as file:
         json.dump(notes, file, indent=4)
+
 
 def add_note(title, message):
     notes = load_notes()
@@ -27,21 +30,27 @@ def add_note(title, message):
     notes.append(note)
     save_notes(notes)
     print("Заметка успешно сохранена\n")
+    print((">" * 20) + ("<" * 20)+"\n")
+
 
 def list_notes(date_filter=None):
     notes = load_notes()
     if date_filter:
-        filtered_notes = [note for note in notes if date_filter in note['timestamp']]
+        filtered_notes = [
+            note for note in notes if date_filter in note['timestamp']]
         if not filtered_notes:
             print("Заметок с указанной датой не найдено.\n")
+            print((">" * 20) + ("<" * 20)+"\n")
             return
         notes = filtered_notes
-    
+
     for note in notes:
         print(f"ID: {note['id']}")
         print(f"Заголовок: {note['title']}")
         print(f"Дата/время: {note['timestamp']}")
         print(f"Содержание: {note['message']}\n")
+    print((">" * 20) + ("<" * 20)+"\n")
+
 
 def edit_note(note_id, new_title, new_message):
     notes = load_notes()
@@ -52,8 +61,15 @@ def edit_note(note_id, new_title, new_message):
             note["timestamp"] = str(datetime.datetime.now())
             save_notes(notes)
             print("Заметка успешно отредактирована\n")
+            print(note["id"])
+            print(note["title"])
+            print(note["message"])
+            print(note["timestamp"])
+            print(("\n" + ">" * 20) + ("<" * 20)+"\n")
             return
     print("Заметка с указанным ID не найдена\n")
+    print((">" * 20) + ("<" * 20)+"\n")
+
 
 def delete_note(note_id):
     notes = load_notes()
@@ -61,8 +77,11 @@ def delete_note(note_id):
     if len(updated_notes) < len(notes):
         save_notes(updated_notes)
         print("Заметка успешно удалена\n")
+        print((">" * 20) + ("<" * 20)+"\n")
     else:
         print("Заметка с указанным ID не найдена\n")
+        print((">" * 20) + ("<" * 20)+"\n")
+
 
 def main():
     while True:
@@ -72,6 +91,7 @@ def main():
         print("4. Редактировать заметку")
         print("5. Удалить заметку")
         print("6. Выйти")
+        print("_" * 30)
 
         choice = input("Введите номер команды: \n")
 
@@ -82,7 +102,8 @@ def main():
         elif choice == "2":
             list_notes()
         elif choice == "3":
-            date_filter = input("Введите дату (гггг-мм-дд) для фильтрации заметок: \n")
+            date_filter = input(
+                "Введите дату (гггг-мм-дд) для фильтрации заметок: \n")
             list_notes(date_filter)
         elif choice == "4":
             note_id = int(input("Введите ID заметки для редактирования: \n"))
@@ -95,8 +116,10 @@ def main():
         elif choice == "6":
             break
         else:
-            print("Неверный выбор, попробуйте ещё раз.")
-            print("-" * 60)
+            print("Неверный выбор, попробуйте ещё раз.\n")
+            print((">" * 20) + ("<" * 20)+"\n")
+            break
+
 
 if __name__ == "__main__":
     main()
